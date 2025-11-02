@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Book Details</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+</head>
+<body class="container mt-4">
+<div id="book-details"></div>
+<button id="tradeBtn" class="btn btn-primary mt-3">Request Trade</button>
+
+<script>
+// Extract book ID from URL: book_details.html?id=5
+const params = new URLSearchParams(window.location.search);
+const bookId = params.get('id');
+
+function loadBook(){
+    $.post('../backend/books.php',{action:'list_books'},function(data){
+        const books = JSON.parse(data);
+        const book = books.find(b=>b.id==bookId);
+        if(!book){ $('#book-details').html('<p>Book not found</p>'); return; }
+        $('#book-details').html(`
+          <div class="card">
+            <img src="${book.cover}" class="card-img-top" height="250">
+            <div class="card-body">
+              <h3>${book.title}</h3>
+              <p>Author: ${book.author}</p>
+              <p>Category: ${book.category}</p>
+              <p>Condition: ${book.condition}</p>
+              <p>Owner: ${book.owner_name}</p>
+              <p>City: ${book.city}</p>
+              <p>Price: ${book.price ? '$'+book.price : 'Free'}</p>
+            </div>
+          </div>
+        `);
+        $('#tradeBtn').data('receiver',book.user_id);
+    });
+}
+loadBook();
+
+$('#tradeBtn').on('click',function(){
+    const receiverId = $(this).data('receiver');
+    $.post('../backend/books.php',{action:'trade_request',book_id:bookId,receiver_id:receiverId},function(data){
+        const res = JSON.parse(data);
+        alert(res.status==='success' ? 'Trade request sent!' : 'Failed to send trade request');
+    });
+});
+</script>
+</body>
+</html>

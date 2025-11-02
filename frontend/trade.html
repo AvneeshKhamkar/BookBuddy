@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>📜 Trade History - BookBuddy</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+</head>
+<body class="container mt-4">
+
+<h3>📜 Trade History</h3>
+<div id="tradeContainer" class="mt-4">Loading trades...</div>
+
+<script>
+$(document).ready(function() {
+  console.log("✅ Trade page loaded!");
+
+  function loadTrades() {
+    $.ajax({
+      url: '../backend/trade.php',
+      type: 'POST',
+      data: { action: 'get_trades' },
+      dataType: 'json',
+      success: function(res) {
+        if (res.status === 'success') {
+          renderTrades(res.trades);
+        } else {
+          $('#tradeContainer').html('<p>❌ Failed to load trades.</p>');
+        }
+      },
+      error: function() {
+        $('#tradeContainer').html('<p>⚠️ Server error.</p>');
+      }
+    });
+  }
+
+  function renderTrades(trades) {
+    const container = $('#tradeContainer');
+    container.empty();
+
+    if (trades.length === 0) {
+      container.html('<p>No trade history yet.</p>');
+      return;
+    }
+
+    trades.forEach(t => {
+      const color = t.status === 'accepted' ? 'success' : (t.status === 'rejected' ? 'danger' : 'secondary');
+      const card = `
+        <div class="card mb-3 border-${color}">
+          <div class="card-body">
+            <h5>${t.title}</h5>
+            <p><strong>Requester:</strong> ${t.requester} | <strong>Owner:</strong> ${t.owner}</p>
+            <p>Status: <span class="badge bg-${color}">${t.status}</span> <small>(${t.created_at})</small></p>
+            ${t.status === 'pending' && t.owner === "<?php echo $_SESSION['user_name']; ?>" ? `
+              <button class="btn btn-success btn-sm" onclick="updateTrade(${t.id}, 'accepted')">Accept</button>
+              <button class="btn btn-danger btn-sm" onclick="updateTrade(${t.id}, 'rejected')">Reject</button>
+            ` : ''}
+          </div>
+        </div>`;
+      container.append(card);
+    });
+  }
+
+  window.updateTrade = function(tradeId, status) {
+    $.post('../backend/trade.php', { action: 'update_trade', trade_id: tradeId, status }, function(res) {
+      if (res.status === 'success') {
+        alert(res.message);
+        loadTrades();
+      } else {
+        alert('❌ Failed to update trade.');
+      }
+    }, 'json');
+  };
+
+  loadTrades();
+});
+</script>
+
+</body>
+</html>

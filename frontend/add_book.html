@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Add New Book | BookBuddy</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .container {
+      max-width: 600px;
+      margin-top: 50px;
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h2 class="text-center mb-4">📚 Add a New Book</h2>
+    
+    <form id="addBookForm" enctype="multipart/form-data">
+      <div class="mb-3">
+        <label class="form-label">Book Title</label>
+        <input type="text" name="title" class="form-control" placeholder="Enter book title" required>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Author</label>
+        <input type="text" name="author" class="form-control" placeholder="Enter author name" required>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Genre</label>
+        <input type="text" name="genre" class="form-control" placeholder="Enter genre">
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Description</label>
+        <textarea name="description" class="form-control" placeholder="Enter description"></textarea>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Book Cover (optional)</label>
+        <input type="file" name="image" class="form-control" accept="image/*">
+      </div>
+
+      <div class="d-grid">
+        <button class="btn btn-primary" type="submit">➕ Add Book</button>
+      </div>
+    </form>
+
+    <div id="message" class="mt-4 text-center"></div>
+
+    <div class="text-center mt-3">
+      <a href="dashboard.php" class="btn btn-outline-secondary">⬅️ Back to Dashboard</a>
+    </div>
+  </div>
+
+  <script>
+    console.log("✅ Script loaded!");
+
+    $(document).ready(function() {
+      console.log("✅ jQuery ready!");
+
+      $('#addBookForm').on('submit', function(e) {
+        e.preventDefault();
+        console.log("📤 Submitting form...");
+
+        const formData = new FormData(this);
+
+        $.ajax({
+          url: '../backend/add_book.php', // ✅ using new backend file
+          type: 'POST',
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: function(response) {
+            console.log("✅ Response:", response);
+            
+            try {
+              const data = typeof response === 'string' ? JSON.parse(response) : response;
+
+              if (data.status === 'success') {
+                $('#message').html(`<div class="alert alert-success">${data.message}</div>`);
+                $('#addBookForm')[0].reset();
+
+                // Redirect after success
+                setTimeout(() => {
+                  window.location.href = 'dashboard.php';
+                }, 1500);
+              } else {
+                $('#message').html(`<div class="alert alert-danger">${data.message}</div>`);
+              }
+            } catch (err) {
+              console.error("⚠️ JSON Parse Error:", err, "Data:", response);
+              $('#message').html(`<div class="alert alert-warning">⚠️ Invalid response from server.</div>`);
+            }
+          },
+          error: function(xhr, status, error) {
+            console.error("❌ AJAX Error:", error);
+            $('#message').html(`<div class="alert alert-danger">Server error: ${error}</div>`);
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
