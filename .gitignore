@@ -1,0 +1,14 @@
+# 🔒 Sensitive files to ignore
+backend/db_connect.php
+
+# 🖼️ Uploaded images should not go to GitHub
+uploads/
+
+# 🧩 System / temporary files
+.DS_Store
+Thumbs.db
+
+# 🚫 Node, vendor, or log folders (for future)
+vendor/
+node_modules/
+*.log
