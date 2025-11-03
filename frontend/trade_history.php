@@ -24,6 +24,7 @@ $user_name = $_SESSION['user_name'];
       margin-bottom: 15px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.05);
     }
+    small { color: #555; font-style: italic; }
   </style>
 </head>
 <body>
@@ -113,8 +114,8 @@ $user_name = $_SESSION['user_name'];
               html += `
                 <div class="trade-card">
                   <h5>📘 ${t.book_title}</h5>
-                  <p><strong>Requester:</strong> ${t.requester_name}</p>
-                  <p><strong>Owner:</strong> ${t.owner_name}</p>
+                  <p><strong>Requester:</strong> ${t.requester_name} <br><small>📧 ${t.requester_email}</small></p>
+                  <p><strong>Owner:</strong> ${t.owner_name} <br><small>📧 ${t.owner_email}</small></p>
                   <p><strong>Status:</strong>
                     <span class="badge ${t.status === 'accepted' ? 'bg-success' : t.status === 'declined' ? 'bg-danger' : 'bg-warning'}">
                       ${t.status}
