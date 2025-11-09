@@ -6,17 +6,86 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
   <style>
+    /* 🌈 Background & layout */
     body {
-      background-color: #f8f9fa;
+      background: linear-gradient(135deg, #a8edea, #fed6e3);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Poppins', sans-serif;
     }
+
+    /* 🧾 Form container */
     .container {
       max-width: 600px;
-      margin-top: 50px;
-      background: white;
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      background: #ffffffd9;
+      backdrop-filter: blur(10px);
+      padding: 40px 35px;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      animation: fadeIn 0.7s ease-in-out;
     }
+
+    h2 {
+      font-weight: 700;
+      color: #4a4a4a;
+    }
+
+    /* ✨ Input fields */
+    .form-control, textarea {
+      border-radius: 12px;
+      border: 1px solid #e0e0e0;
+      transition: 0.3s;
+    }
+
+    .form-control:focus {
+      border-color: #7acfc0;
+      box-shadow: 0 0 0 0.2rem rgba(122, 207, 192, 0.25);
+    }
+
+    /* 🎨 Buttons */
+    .btn-primary {
+      background: linear-gradient(135deg, #7acfc0, #a0d8ef);
+      border: none;
+      border-radius: 12px;
+      font-weight: 600;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(122, 207, 192, 0.3);
+    }
+
+    .btn-outline-secondary {
+      border-radius: 12px;
+      transition: 0.3s;
+    }
+
+    .btn-outline-secondary:hover {
+      background: #f0f0f0;
+      transform: scale(1.05);
+    }
+
+    /* 💬 Message styling */
+    #message {
+      font-size: 0.95rem;
+    }
+
+    /* 🌀 Animation */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .mb-3 {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 10px;
+  padding: 15px;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  margin-bottom: 20px;
+}
   </style>
 </head>
 
@@ -75,7 +144,7 @@
         const formData = new FormData(this);
 
         $.ajax({
-          url: '../backend/add_book.php', // ✅ using new backend file
+          url: '../backend/add_book.php',
           type: 'POST',
           data: formData,
           processData: false,
@@ -90,7 +159,6 @@
                 $('#message').html(`<div class="alert alert-success">${data.message}</div>`);
                 $('#addBookForm')[0].reset();
 
-                // Redirect after success
                 setTimeout(() => {
                   window.location.href = 'dashboard.php';
                 }, 1500);
