@@ -15,17 +15,86 @@ $user_name = $_SESSION['user_name'];
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
   <style>
-    body { background-color: #f8f9fa; }
-    .trade-card {
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      background: #fff;
-      padding: 15px;
-      margin-bottom: 15px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    }
-    small { color: #555; font-style: italic; }
-  </style>
+  /* 🌈 BookBuddy pastel background */
+  body {
+    background: linear-gradient(135deg, #a8edea, #fed6e3);
+    min-height: 100vh;
+    margin: 0;
+    font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+    animation: fadeIn 0.7s ease-in-out;
+  }
+
+  /* 📦 Trade cards */
+  .trade-card {
+    border: none;
+    border-radius: 16px;
+    background: #ffffffd9;
+    backdrop-filter: blur(10px);
+    padding: 20px 25px;
+    margin-bottom: 20px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .trade-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 28px rgba(122, 207, 192, 0.25);
+  }
+
+  /* 🏷️ Headers & text */
+  h2 {
+    font-weight: 700;
+    color: #444;
+  }
+
+  small {
+    color: #666;
+    font-style: italic;
+  }
+
+  /* 🎨 Buttons */
+  .btn-secondary {
+    background: linear-gradient(135deg, #a0d8ef, #7acfc0);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .btn-secondary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(122, 207, 192, 0.3);
+  }
+
+  .btn-success {
+    background: linear-gradient(135deg, #7acfc0, #a0d8ef);
+    border: none;
+  }
+
+  .btn-danger {
+    background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+    border: none;
+  }
+
+  /* ✨ Modal style */
+  .modal-content {
+    background: #ffffffd9;
+    backdrop-filter: blur(8px);
+    border-radius: 18px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+  }
+
+  /* 🌀 Entry animation */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+
 </head>
 <body>
   <div class="container mt-4">
