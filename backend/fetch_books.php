@@ -1,30 +1,65 @@
 <?php
-session_start();
+header("Content-Type: application/json");
 include 'db_connect.php';
 
-header('Content-Type: application/json');
+$response = [];
 
-// Check if user is logged in
-if (!isset($_SESSION['user_id'])) {
-    echo json_encode(["status" => "error", "message" => "User not logged in"]);
-    exit;
-}
+try {
+    // ✅ Check if table exists before querying
+    $checkTable = $conn->query("SHOW TABLES LIKE 'books'");
+    if ($checkTable->num_rows === 0) {
+        echo json_encode([
+            "status" => "error",
+            "message" => "Table 'books' does not exist in the database."
+        ]);
+        exit;
+    }
 
-$user_id = $_SESSION['user_id'];
+    // ✅ Query to fetch all books along with uploader info
+    $sql = "
+        SELECT 
+            b.id, 
+            b.title, 
+            b.author, 
+            b.genre, 
+            b.description, 
+            b.image,
+            u.name AS owner_name,
+            u.email AS owner_email,
+            u.id AS user_id
+        FROM books b
+        JOIN users u ON b.user_id = u.id
+        ORDER BY b.id DESC
+    ";
 
-// ✅ Fetch all books
-$query = "SELECT id, user_id, title, author, genre, description, image FROM books ORDER BY id DESC";
-$result = $conn->query($query);
+    $result = $conn->query($sql);
 
-if ($result && $result->num_rows > 0) {
+    if (!$result) {
+        throw new Exception("Database query failed: " . $conn->error);
+    }
+
+    // ✅ Build the books array
     $books = [];
     while ($row = $result->fetch_assoc()) {
+        // Handle missing image gracefully
+        $row['image'] = !empty($row['image']) ? $row['image'] : 'default.jpg';
         $books[] = $row;
     }
-    echo json_encode(["status" => "success", "books" => $books]);
-} else {
-    echo json_encode(["status" => "error", "message" => "No books found"]);
+
+    // ✅ Final JSON response
+    $response = [
+        "status" => "success",
+        "count"  => count($books),
+        "books"  => $books
+    ];
+
+} catch (Exception $e) {
+    $response = [
+        "status" => "error",
+        "message" => "Server exception: " . $e->getMessage()
+    ];
 }
 
+echo json_encode($response, JSON_PRETTY_PRINT);
 $conn->close();
 ?>

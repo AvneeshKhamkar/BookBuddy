@@ -1,41 +1,51 @@
 <?php
-session_start();
 include 'db_connect.php';
 header('Content-Type: application/json');
 
-if (!isset($_SESSION['user_id'])) {
-    echo json_encode(["status" => "error", "message" => "User not logged in"]);
-    exit;
-}
-
-$user_id = $_SESSION['user_id'];
-
 try {
-    $sql = "
-        SELECT 
-            t.id, 
-            t.status, 
-            t.trade_type,
-            t.offered_book_id,
-            t.offered_price,
-            t.created_at,
-            b.title AS book_title,
-            requester.name AS requester_name,
-            requester.email AS requester_email,
-            owner.name AS owner_name,
-            owner.email AS owner_email,
-            ob.title AS offered_book_title
-        FROM trades t
-        JOIN books b ON t.book_id = b.id
-        JOIN users requester ON t.requester_id = requester.id
-        JOIN users owner ON t.owner_id = owner.id
-        LEFT JOIN books ob ON t.offered_book_id = ob.id
-        WHERE t.requester_id = ? OR t.owner_id = ?
-        ORDER BY t.created_at DESC
-    ";
+    $where = [];
+    $params = [];
+    $types = '';
+
+    // ✅ Handle Filters
+    if (!empty($_GET['user'])) {
+        $where[] = "(r.name LIKE ? OR o.name LIKE ?)";
+        $params[] = "%" . $_GET['user'] . "%";
+        $params[] = "%" . $_GET['user'] . "%";
+        $types .= 'ss';
+    }
+
+    if (!empty($_GET['status'])) {
+        $where[] = "t.status = ?";
+        $params[] = $_GET['status'];
+        $types .= 's';
+    }
+
+    // ✅ Main Query
+    $sql = "SELECT 
+                t.id, 
+                b.title AS book_title,
+                r.name AS requester_name, 
+                o.name AS owner_name,
+                t.status, 
+                t.created_at
+            FROM trades t
+            JOIN books b ON t.book_id = b.id
+            JOIN users r ON t.requester_id = r.id
+            JOIN users o ON t.owner_id = o.id";
+
+    if (!empty($where)) {
+        $sql .= " WHERE " . implode(" AND ", $where);
+    }
+
+    $sql .= " ORDER BY t.created_at DESC";
 
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ii", $user_id, $user_id);
+
+    if (!empty($params)) {
+        $stmt->bind_param($types, ...$params);
+    }
+
     $stmt->execute();
     $result = $stmt->get_result();
 
@@ -44,8 +54,17 @@ try {
         $trades[] = $row;
     }
 
-    echo json_encode(["status" => "success", "trades" => $trades]);
+    echo json_encode([
+        "status" => "success",
+        "trades" => $trades
+    ]);
+
 } catch (Exception $e) {
-    echo json_encode(["status" => "error", "message" => "Server exception: " . $e->getMessage()]);
+    echo json_encode([
+        "status" => "error",
+        "message" => "Server exception: " . $e->getMessage()
+    ]);
 }
+
+$conn->close();
 ?>

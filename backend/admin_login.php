@@ -11,25 +11,31 @@ if (empty($username) || empty($password)) {
     exit;
 }
 
-// Debug (optional)
-error_log("Trying to login with username: $username");
-
+// ✅ Check admin by username instead of email
 $stmt = $conn->prepare("SELECT * FROM admins WHERE username = ?");
 $stmt->bind_param("s", $username);
 $stmt->execute();
 $result = $stmt->get_result();
-$admin = $result->fetch_assoc();
 
-if ($admin) {
+if ($result->num_rows === 1) {
+    $admin = $result->fetch_assoc();
+
     if (password_verify($password, $admin['password'])) {
+        // ✅ Set session variables
         $_SESSION['admin_id'] = $admin['id'];
-        $_SESSION['admin_username'] = $admin['username'];
-        echo json_encode(["status" => "success", "message" => "Login successful!"]);
+        $_SESSION['admin_name'] = $admin['username'];
+        $_SESSION['is_admin'] = true;
+
+        echo json_encode([
+            "status" => "success",
+            "message" => "Welcome, $username!",
+            "redirect" => "../admin/admin_dashboard.php"
+        ]);
     } else {
-        echo json_encode(["status" => "error", "message" => "Wrong password."]);
+        echo json_encode(["status" => "error", "message" => "❌ Wrong password."]);
     }
 } else {
-    echo json_encode(["status" => "error", "message" => "Admin not found."]);
+    echo json_encode(["status" => "error", "message" => "❌ Admin not found."]);
 }
 
 $stmt->close();
