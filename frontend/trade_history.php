@@ -15,7 +15,7 @@ $user_name = $_SESSION['user_name'];
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
   <style>
-  /* 🌈 BookBuddy pastel background */
+  
   body {
     background: linear-gradient(135deg, #a8edea, #fed6e3);
     min-height: 100vh;
@@ -28,7 +28,7 @@ $user_name = $_SESSION['user_name'];
     animation: fadeIn 0.7s ease-in-out;
   }
 
-  /* 📦 Trade cards */
+  
   .trade-card {
     border: none;
     border-radius: 16px;
@@ -45,7 +45,7 @@ $user_name = $_SESSION['user_name'];
     box-shadow: 0 12px 28px rgba(122, 207, 192, 0.25);
   }
 
-  /* 🏷️ Headers & text */
+  
   h2 {
     font-weight: 700;
     color: #444;
@@ -56,7 +56,7 @@ $user_name = $_SESSION['user_name'];
     font-style: italic;
   }
 
-  /* 🎨 Buttons */
+  
   .btn-secondary {
     background: linear-gradient(135deg, #a0d8ef, #7acfc0);
     color: #fff;
@@ -80,7 +80,7 @@ $user_name = $_SESSION['user_name'];
     border: none;
   }
 
-  /* ✨ Modal style */
+  
   .modal-content {
     background: #ffffffd9;
     backdrop-filter: blur(8px);
@@ -88,7 +88,7 @@ $user_name = $_SESSION['user_name'];
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
   }
 
-  /* 🌀 Entry animation */
+  
   @keyframes fadeIn {
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
@@ -105,7 +105,7 @@ $user_name = $_SESSION['user_name'];
 
     <div id="tradeList">Loading trades...</div>
 
-    <!-- ✅ Modal for choosing trade type -->
+    
     <div class="modal fade" id="tradeTypeModal" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -121,7 +121,6 @@ $user_name = $_SESSION['user_name'];
                 <select class="form-select" id="tradeTypeSelect">
                   <option value="">-- Select Type --</option>
                   <option value="book">Exchange Book</option>
-                  <option value="money">Money Trade</option>
                 </select>
               </div>
 
@@ -156,7 +155,7 @@ $user_name = $_SESSION['user_name'];
       loadMyBooks();
     });
 
-    // ✅ Load trade requests
+    
     function loadTrades() {
       $.ajax({
         url: "../backend/get_trades.php",
@@ -209,7 +208,7 @@ $user_name = $_SESSION['user_name'];
       });
     }
 
-    // ✅ Load user's books for dropdown
+    
     function loadMyBooks() {
       $.ajax({
         url: "../backend/fetch_books.php",
@@ -223,14 +222,14 @@ $user_name = $_SESSION['user_name'];
       });
     }
 
-    // ✅ Open modal for selecting trade type
+    
     function openTradeModal(tradeId) {
       $("#modalTradeId").val(tradeId);
       $("#tradeTypeSelect").val("");
       $("#bookTradeOptions, #moneyTradeOptions").hide();
       $("#offeredPrice").val("");
 
-      // Populate book dropdown
+      
       const dropdown = $("#myBookDropdown");
       dropdown.empty();
       dropdown.append(`<option value="">-- Select Your Book --</option>`);
@@ -242,7 +241,7 @@ $user_name = $_SESSION['user_name'];
       modal.show();
     }
 
-    // ✅ Toggle options
+    
     $("#tradeTypeSelect").on("change", function() {
       const type = $(this).val();
       if (type === "book") {
@@ -256,7 +255,7 @@ $user_name = $_SESSION['user_name'];
       }
     });
 
-    // ✅ Confirm trade
+    
     $("#confirmTradeBtn").on("click", function() {
       const tradeId = $("#modalTradeId").val();
       const type = $("#tradeTypeSelect").val();
@@ -300,7 +299,7 @@ $user_name = $_SESSION['user_name'];
       });
     });
 
-    // ✅ Decline trade
+    
     function updateTrade(tradeId, status) {
       $.ajax({
         url: "../backend/update_trade.php",

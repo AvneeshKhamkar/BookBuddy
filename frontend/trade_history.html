@@ -92,10 +92,10 @@
       });
     }
 
-    // Load on page start
+    
     loadTrades();
 
-    // Handle Accept/Reject actions
+    
     $(document).on("click", ".acceptBtn, .rejectBtn", function () {
       const tradeId = $(this).data("id");
       const newStatus = $(this).hasClass("acceptBtn") ? "Accepted" : "Rejected";

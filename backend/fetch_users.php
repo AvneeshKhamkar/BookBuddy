@@ -3,13 +3,13 @@ header("Content-Type: application/json");
 include 'db_connect.php';
 
 try {
-    // ✅ Check database connection
+    
     if (!$conn) {
         echo json_encode(["status" => "error", "message" => "Database connection failed"]);
         exit;
     }
 
-    // ✅ Query to get all users and count how many books each added
+    
     $sql = "
         SELECT 
             u.id, 

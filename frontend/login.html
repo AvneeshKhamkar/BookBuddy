@@ -1,217 +1,100 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>🔐 Login - BookBuddy</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-
-  <style>
-    body {
-      margin: 0;
-      min-height: 100vh;
-      font-family: 'Segoe UI', Arial, sans-serif;
-      background: linear-gradient(135deg, #fce2db 0%, #e7f0ff 40%, #e5f8f6 70%, #fde6f2 100%);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background-attachment: fixed;
-    }
-
-    .login-container {
-      display: flex;
-      width: 90%;
-      max-width: 950px;
-      border-radius: 20px;
-      overflow: hidden;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(8px);
-    }
-
-    .login-left {
-      flex: 1;
-      background: linear-gradient(135deg, #cce5ff 0%, #e2f0ff 100%);
-      color: #3d5060;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 40px 30px;
-      text-align: center;
-    }
-
-    .login-left h2 {
-      font-size: 2.2rem;
-      font-weight: bold;
-      margin-bottom: 15px;
-      color: #2f3d56;
-    }
-
-    .login-left p {
-      font-size: 1.05rem;
-      max-width: 320px;
-      line-height: 1.6;
-      color: #4b5b73;
-    }
-
-    .login-right {
-      flex: 1;
-      padding: 50px 40px;
-      background: rgba(255, 255, 255, 0.92);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-
-    .login-right h3 {
-      font-size: 1.9rem;
-      margin-bottom: 25px;
-      text-align: center;
-      color: #3d5060;
-    }
-
-    .form-control {
-      border-radius: 12px;
-      border: 1px solid #dee2e6;
-      transition: 0.3s;
-    }
-
-    .form-control:focus {
-      border-color: #91bdfc;
-      box-shadow: 0 0 0 0.2rem rgba(145, 189, 252, 0.25);
-    }
-
-    .btn-primary {
-      width: 100%;
-      background: linear-gradient(135deg, #a7c7ff, #b8e0d2);
-      border: none;
-      border-radius: 12px;
-      transition: 0.3s;
-    }
-
-    .btn-primary:hover {
-      background: linear-gradient(135deg, #91bdfc, #9fe6e1);
-    }
-
-    .text-muted a {
-      color: #5a89e5;
-      text-decoration: none;
-      font-weight: 500;
-    }
-
-    .text-muted a:hover {
-      text-decoration: underline;
-    }
-
-    @media (max-width: 768px) {
-      .login-container {
-        flex-direction: column;
-      }
-      .login-left, .login-right {
-        flex: none;
-        width: 100%;
-      }
-      .login-left {
-        padding: 30px 20px;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<title>Login | BookBuddy</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<style>
+body {
+ height: 100vh;
+ margin: 0;
+ background: linear-gradient(135deg, #667eea, #764ba2);
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ font-family: 'Segoe UI';
+}
+.card-box {
+ width: 380px;
+ padding: 35px;
+ border-radius: 20px;
+ background: rgba(255,255,255,0.15);
+ backdrop-filter: blur(20px);
+ box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+ color: white;
+}
+h2 {
+ text-align: center;
+ margin-bottom: 20px;
+}
+.form-control {
+ border-radius: 12px;
+ border: none;
+}
+.error {
+ color: #ffb3b3;
+ font-size: 13px;
+ margin-bottom: 8px;
+}
+.btn-login {
+ width: 100%;
+ border-radius: 12px;
+ background: #ff7eb3;
+ border: none;
+ font-weight: bold;
+}
+.btn-login:hover {
+ background: #ff4d94;
+}
+</style>
 </head>
-
 <body>
-  <div class="login-container">
-    <div class="login-left">
-      <h2>📚 Welcome to BookBuddy</h2>
-      <p>Discover, share, and exchange college books effortlessly.<br>
-      BookBuddy connects learners who believe knowledge grows best when shared.</p>
-    </div>
-
-    <div class="login-right">
-      <h3>Login to Continue</h3>
-      <form id="loginForm" novalidate>
-        <div class="mb-3">
-          <label>Email</label>
-          <input type="email" name="email" class="form-control" required>
-          <div class="invalid-feedback">Please enter a valid email address.</div>
-        </div>
-
-        <div class="mb-3">
-          <label>Password</label>
-          <input type="password" name="password" class="form-control" required minlength="6">
-          <div class="invalid-feedback">Password must be at least 6 characters.</div>
-        </div>
-
-        <button type="submit" class="btn btn-primary mt-2">Login</button>
-      </form>
-
-      <p class="text-center mt-3 text-muted">
-        Don’t have an account? <a href="register.html">Register</a>
-      </p>
-    </div>
-  </div>
-
-  <script>
-    $(document).ready(function() {
-      $("#loginForm").on("submit", function(e) {
-        e.preventDefault();
-        let form = this;
-        let email = $('input[name="email"]');
-        let password = $('input[name="password"]');
-        let valid = true;
-
-        
-        form.classList.remove('was-validated');
-
-        
-        const emailVal = email.val().trim();
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailVal || !emailRegex.test(emailVal)) {
-          email.addClass('is-invalid');
-          valid = false;
-        } else {
-          email.removeClass('is-invalid');
-        }
-
-        
-        const passwordVal = password.val().trim();
-        if (!passwordVal || passwordVal.length < 6) {
-          password.addClass('is-invalid');
-          valid = false;
-        } else {
-          password.removeClass('is-invalid');
-        }
-
-        if (!valid) return;
-
-        
-        $.ajax({
-          url: "../backend/login.php",
-          type: "POST",
-          data: new FormData(form),
-          processData: false,
-          contentType: false,
-          success: function(data) {
-            try {
-              if (typeof data === "string") data = JSON.parse(data);
-              if (data.status === "success") {
-                alert("✅ " + data.message);
-                setTimeout(() => window.location.href = "./dashboard.php", 500);
-              } else {
-                alert("❌ " + (data.message || "Login failed!"));
-              }
-            } catch (err) {
-              alert("⚠️ Invalid server response.");
-              console.error(err);
-            }
-          },
-          error: function(xhr, status, error) {
-            alert("Server error: " + error);
-            console.error(xhr.responseText);
-          }
-        });
-      });
-    });
-  </script>
+<div class="card-box">
+<h2>🔐 Login</h2>
+<form id="loginForm">
+<input type="email" name="email" class="form-control mb-2" placeholder="Email">
+<div class="error" id="emailError"></div>
+<input type="password" name="password" class="form-control mb-2" placeholder="Password">
+<div class="error" id="passError"></div>
+<button class="btn btn-login mt-2">Login</button>
+</form>
+<p class="text-center mt-3">
+<a href="register.html" style="color:white;">Create account</a>
+</p>
+</div>
+<script>
+$("#loginForm").submit(function(e){
+ e.preventDefault();
+ let email = $("input[name='email']").val().trim();
+ let password = $("input[name='password']").val();
+ $(".error").text("");
+ let valid = true;
+ let pattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+ if(!email.match(pattern)){
+   $("#emailError").text("Enter valid email");
+   valid = false;
+ }
+ if(password.length < 6){
+   $("#passError").text("Min 6 characters required");
+   valid = false;
+ }
+ if(!valid) return;
+ $.ajax({
+   url:"../backend/login.php",
+   type:"POST",
+   data:$(this).serialize(),
+   dataType:"json",
+   success:function(res){
+     if(res.status==="success"){
+       window.location.href="dashboard.php";
+     } else {
+       $("#passError").text(res.message);
+     }
+   }
+ });
+});
+</script>
 </body>
 </html>

@@ -1,131 +1,114 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Register | BookBuddy</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-
-  <style>
+<meta charset="UTF-8">
+<title>Register | BookBuddy</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<style>
 body {
-  background: linear-gradient(120deg, #fffbe7 0%, #eaf8ff 50%, #fdeee9 100%);
-  background-size: 250% 250%;
-  animation: gradientShift 16s ease infinite;
-  min-height: 100vh;
-  font-family: 'Poppins', sans-serif;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 30px;
+ height: 100vh;
+ margin: 0;
+ background: linear-gradient(135deg, #43cea2, #185a9d);
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ font-family: 'Segoe UI';
 }
-@keyframes gradientShift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-.register-box {
-  width: 100%;
-  max-width: 440px;
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(12px);
-  border-radius: 18px;
-  padding: 40px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-  animation: fadeUp 1.2s ease;
-  transition: all 0.3s ease;
-  border: 1px solid rgba(255,255,255,0.6);
-}
-.register-box:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 30px rgba(160, 200, 255, 0.25);
-}
-@keyframes fadeUp {
-  0% { opacity: 0; transform: translateY(25px); }
-  100% { opacity: 1; transform: translateY(0); }
+.card-box {
+ width: 400px;
+ padding: 35px;
+ border-radius: 20px;
+ background: rgba(255,255,255,0.15);
+ backdrop-filter: blur(20px);
+ box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+ color: white;
 }
 h2 {
-  text-align: center;
-  margin-bottom: 25px;
-  color: #3c4c69;
-  font-weight: 600;
+ text-align: center;
+ margin-bottom: 15px;
 }
-input {
-  border-radius: 12px !important;
-  border: 1px solid #d9e6f7 !important;
-  transition: all 0.25s ease;
-  background: rgba(255,255,255,0.9);
+.form-control {
+ border-radius: 12px;
+ border: none;
 }
-input:focus {
-  box-shadow: 0 0 10px rgba(173, 216, 255, 0.4);
-  border-color: #9cc9ff !important;
-  outline: none;
+.error {
+ color: #ffd1d1;
+ font-size: 13px;
+ margin-bottom: 8px;
 }
-button {
-  background: linear-gradient(135deg, #a8edea, #fed6e3);
-  border: none;
-  border-radius: 12px;
-  transition: all 0.25s ease;
-  color: #2c3e50;
-  font-weight: 600;
-  padding: 10px 14px;
+.btn-register {
+ width: 100%;
+ border-radius: 12px;
+ background: #00c9a7;
+ border: none;
+ font-weight: bold;
 }
-button:hover {
-  background: linear-gradient(135deg, #9de4e0, #f7cfe2);
-  box-shadow: 0 6px 18px rgba(200, 220, 255, 0.4);
-  transform: translateY(-2px);
+.btn-register:hover {
+ background: #00a98b;
 }
-small a {
-  color: #4c76b2;
-  text-decoration: none;
-  font-weight: 500;
-  transition: 0.2s;
-}
-small a:hover {
-  text-decoration: underline;
-  color: #2c5aa0;
-}
-  </style>
+</style>
 </head>
-
 <body>
-  <div class="register-box">
-    <h2>Register to BookBuddy 📚</h2>
-    <form id="registerForm">
-      <input type="text" name="name" class="form-control mb-3" placeholder="Full Name" required>
-      <input type="email" name="email" class="form-control mb-3" placeholder="Email Address" required>
-      <input type="password" name="password" class="form-control mb-3" placeholder="Password" required>
-      <input type="password" name="confirm" class="form-control mb-3" placeholder="Confirm Password" required>
-      <button type="submit" class="btn btn-primary w-100 mt-2">Register</button>
-    </form>
-    <div class="text-center mt-3">
-      <small>Already have an account? <a href="index.html">Login here</a></small>
-    </div>
-  </div>
-
-  <script>
-    $(document).ready(function() {
-      $('#registerForm').on('submit', function(e) {
-        e.preventDefault();
-        $.ajax({
-          url: '../backend/register.php',
-          type: 'POST',
-          data: $(this).serialize(),
-          dataType: 'json',
-          success: function(response) {
-            if (response.status === 'success') {
-              alert('✅ Registration successful! Redirecting to login...');
-              window.location.href = 'index.html';
-            } else {
-              alert('⚠️ ' + (response.message || 'Registration failed.'));
-            }
-          },
-          error: function() {
-            alert('Server error. Please try again.');
-          }
-        });
-      });
-    });
-  </script>
+<div class="card-box">
+<h2>📚 Register</h2>
+<form id="registerForm">
+<input type="text" name="name" class="form-control mb-2" placeholder="Full Name">
+<div class="error" id="nameError"></div>
+<input type="email" name="email" class="form-control mb-2" placeholder="Email">
+<div class="error" id="emailError"></div>
+<input type="password" name="password" class="form-control mb-2" placeholder="Password">
+<div class="error" id="passError"></div>
+<input type="password" id="confirm" class="form-control mb-2" placeholder="Confirm Password">
+<div class="error" id="confirmError"></div>
+<button class="btn btn-register mt-2">Register</button>
+</form>
+<p class="text-center mt-3">
+<a href="index.html" style="color:white;">Already have account?</a>
+</p>
+</div>
+<script>
+$("#registerForm").submit(function(e){
+ e.preventDefault();
+ let name = $("input[name='name']").val().trim();
+ let email = $("input[name='email']").val().trim();
+ let password = $("input[name='password']").val();
+ let confirm = $("#confirm").val();
+ $(".error").text("");
+ let valid = true;
+ let pattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+ if(name === ""){
+   $("#nameError").text("Enter name");
+   valid = false;
+ }
+ if(!email.match(pattern)){
+   $("#emailError").text("Invalid email");
+   valid = false;
+ }
+ if(password.length < 6){
+   $("#passError").text("Min 6 characters required");
+   valid = false;
+ }
+ if(password !== confirm){
+   $("#confirmError").text("Passwords do not match");
+   valid = false;
+ }
+ if(!valid) return;
+ $.ajax({
+   url:"../backend/register.php",
+   type:"POST",
+   data:$(this).serialize(),
+   dataType:"json",
+   success:function(res){
+     if(res.status==="success"){
+       window.location.href="index.html";
+     } else {
+       $("#emailError").text(res.message);
+     }
+   }
+ });
+});
+</script>
 </body>
 </html>

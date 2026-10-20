@@ -62,17 +62,17 @@
       $("#adminLoginForm").on("submit", function(e) {
         e.preventDefault();
 
-        // ✅ Get field values safely
+        
         const username = $("#username").val()?.trim();
         const password = $("#password").val()?.trim();
 
-        // ✅ Validation check
+        
         if (!username || !password) {
           $("#message").text("⚠️ Please enter both username and password.");
           return;
         }
 
-        // ✅ AJAX request
+        
         $.ajax({
           url: "../backend/admin_login.php",
           type: "POST",

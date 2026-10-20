@@ -1,65 +1,133 @@
 <?php
+
 header("Content-Type: application/json");
+
 include 'db_connect.php';
 
 $response = [];
 
 try {
-    // ✅ Check if table exists before querying
-    $checkTable = $conn->query("SHOW TABLES LIKE 'books'");
-    if ($checkTable->num_rows === 0) {
-        echo json_encode([
-            "status" => "error",
-            "message" => "Table 'books' does not exist in the database."
-        ]);
-        exit;
+
+    $search = $_GET['search'] ?? '';
+
+    $genre = $_GET['genre'] ?? '';
+
+    $condition = $_GET['condition'] ?? '';
+
+    // ✅ Base query
+
+    $sql = "
+
+        SELECT 
+
+            b.id,
+
+            b.title,
+
+            b.author,
+
+            b.genre,
+
+            b.description,
+
+            b.image,
+
+            b.price,
+
+            b.book_condition,
+
+            b.missing_pages,
+
+            b.rating,
+
+            u.name AS owner_name,
+
+            u.email AS owner_email,
+u.id AS user_id
+
+        FROM books b
+
+        JOIN users u ON b.user_id = u.id
+
+        WHERE 1=1
+
+    ";
+
+    // ✅ Apply filters safely
+
+    if (!empty($search)) {
+
+        $search = $conn->real_escape_string($search);
+
+        $sql .= " AND (
+
+            b.title LIKE '%$search%' OR
+
+            b.author LIKE '%$search%' OR
+
+            b.genre LIKE '%$search%'
+
+        )";
+
     }
 
-    // ✅ Query to fetch all books along with uploader info
-    $sql = "
-        SELECT 
-            b.id, 
-            b.title, 
-            b.author, 
-            b.genre, 
-            b.description, 
-            b.image,
-            u.name AS owner_name,
-            u.email AS owner_email,
-            u.id AS user_id
-        FROM books b
-        JOIN users u ON b.user_id = u.id
-        ORDER BY b.id DESC
-    ";
+    if (!empty($genre)) {
+
+        $genre = $conn->real_escape_string($genre);
+
+        $sql .= " AND b.genre LIKE '%$genre%'";
+
+    }
+
+    if (!empty($condition)) {
+
+        $condition = $conn->real_escape_string($condition);
+
+        $sql .= " AND b.book_condition = '$condition'";
+
+    }
+
+    // ✅ Order
+
+    $sql .= " ORDER BY b.id DESC";
 
     $result = $conn->query($sql);
 
     if (!$result) {
-        throw new Exception("Database query failed: " . $conn->error);
+
+        throw new Exception($conn->error);
+
     }
 
-    // ✅ Build the books array
     $books = [];
+
     while ($row = $result->fetch_assoc()) {
-        // Handle missing image gracefully
-        $row['image'] = !empty($row['image']) ? $row['image'] : 'default.jpg';
+
         $books[] = $row;
+
     }
 
-    // ✅ Final JSON response
-    $response = [
+    echo json_encode([
+
         "status" => "success",
-        "count"  => count($books),
-        "books"  => $books
-    ];
+
+        "books" => $books
+
+    ]);
 
 } catch (Exception $e) {
-    $response = [
+
+    echo json_encode([
+
         "status" => "error",
+
         "message" => "Server exception: " . $e->getMessage()
-    ];
+
+    ]);
+
 }
 
-echo json_encode($response, JSON_PRETTY_PRINT);
 $conn->close();
+
 ?>
+ 

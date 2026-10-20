@@ -92,7 +92,7 @@ $admin_name = $_SESSION['admin_name'] ?? 'Admin';
 </head>
 
 <body>
-  <!-- 🌟 Navbar -->
+  
   <nav class="navbar navbar-expand-lg navbar-light">
     <div class="container">
       <a class="navbar-brand" href="#">📚 BookBuddy Admin</a>
@@ -103,7 +103,7 @@ $admin_name = $_SESSION['admin_name'] ?? 'Admin';
     </div>
   </nav>
 
-  <!-- 📊 Dashboard Content -->
+  
   <div class="dashboard-container">
     <ul class="nav nav-tabs mb-4" id="adminTabs">
       <li class="nav-item">
@@ -115,7 +115,7 @@ $admin_name = $_SESSION['admin_name'] ?? 'Admin';
     </ul>
 
     <div class="tab-content">
-      <!-- 📚 BOOKS TAB -->
+      
       <div class="tab-pane fade show active" id="booksTab">
         <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
           <h3 class="fw-bold text-primary">📘 Books Overview</h3>
@@ -139,7 +139,7 @@ $admin_name = $_SESSION['admin_name'] ?? 'Admin';
         </div>
       </div>
 
-      <!-- 👥 USERS TAB -->
+      
       <div class="tab-pane fade" id="usersTab">
         <h3 class="fw-bold text-primary mb-3">👥 Registered Users</h3>
         <div id="usersContainer" class="row g-4">
@@ -171,7 +171,7 @@ $admin_name = $_SESSION['admin_name'] ?? 'Admin';
       });
     });
 
-    // ✅ Load Books
+    
     function loadBooks() {
       $.ajax({
         url: "../backend/fetch_books.php",
@@ -223,7 +223,7 @@ $admin_name = $_SESSION['admin_name'] ?? 'Admin';
       $("#genresCount").text(new Set(books.map(b => b.genre)).size);
     }
 
-    // ✅ Load Users
+    
     function loadUsers() {
       $.ajax({
         url: "../backend/fetch_users.php",
